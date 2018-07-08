@@ -16,6 +16,7 @@ var concatCss = require('gulp-concat');
 
 var uglify = require('gulp-uglify');
 
+
 // //起服务
 gulp.task('server', ['scss'], function() {
     gulp.src('src')
@@ -40,10 +41,34 @@ gulp.task('scss', function() {
         .pipe(gulp.dest('src/css'))
 });
 
+//js
+gulp.task('js', function() {
+    gulp.src('./src/js/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('src/java'))
+});
+
 //监听
 gulp.task('watch', function() {
     gulp.watch('./src/scss/*.scss', ['scss'])
 });
 
 //开发环境
-gulp.task('default', ['server', 'watch'])
+gulp.task('default', ['server', 'watch']);
+
+
+gulp.task('buildScss', function() {
+    gulp.src('./src/scss/*.css')
+        .pipe(sass())
+        .pipe(concatCss('all.css'))
+        .pipe(gulp.dest('build/css'))
+});
+
+gulp.task('buildjs', function() {
+    gulp.src('./src/js/*.js')
+        .pipe(uglify())
+        .pipe(concatCss('all.js'))
+        .pipe(gulp.dest('build/java'))
+});
+//线上环境
+gulp.task('build', ['buildScss', 'buildjs'])
